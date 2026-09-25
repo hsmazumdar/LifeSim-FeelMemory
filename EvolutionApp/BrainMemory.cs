@@ -232,7 +232,7 @@ namespace Evolution
     /// Tours longer than MaxPathSteps are discarded with no LTM update.
     /// At end of a finished tour (&lt;=cap), unique 10-slot units (8-neigh + nearness + goalDir)
     /// not already in STM-unique or LTM are promoted into LTM (strength++ / vote).
-    /// Policy: brain-v16-feel-atlas. Fix2: ClearStm / CloneFrozenLtmOnly preserved. Success-only LTM promote.
+    /// Policy: brain-feel-atlas. Fix2: ClearStm / CloneFrozenLtmOnly preserved. Success-only LTM promote.
     /// </summary>
     public sealed class WorldFingerprint
     {
@@ -249,7 +249,7 @@ namespace Evolution
 
     public sealed class BrainMemory
     {
-        public const string PolicyVersion = "brain-v16.1-feel-atlas";
+        public const string PolicyVersion = "brain-feel-atlas";
         public const int MemFormatVersion = 2;
         public const int DefaultStmCapacity = 1000;
         public const int DefaultLtmCapacity = 512;
@@ -1270,11 +1270,11 @@ namespace Evolution
                 float str = (successTour ? 1.0f : 0.35f) * strengthMult;
                 if (c >= 2) str *= 1.25f;
                 byte gdir = GoalDirUnset;
-                // if success, try to use backfilled direction from last step of ngram window — approximate via matching STM entry
+                // if success, try to use backfilled direction from last step of ngram window â€” approximate via matching STM entry
                 if (successTour) gdir = FindBackfilledDirNear(ng, len);
 
                 string world = _activeWorldId ?? "";
-                // V16 Fix E: SUCCESS-ONLY promote — never AppendOrMergeLtm on mid-tour analyze.
+                // V16 Fix E: SUCCESS-ONLY promote â€” never AppendOrMergeLtm on mid-tour analyze.
                 if (!successTour) continue;
                 var rule = SenseMoveRule.FromFeelNgram(ng, len, pbin, gdir, bestMove, Math.Max(0.2f, str), world);
                 string key = rule.UnitKey();
@@ -1556,7 +1556,7 @@ namespace Evolution
             sb.AppendLine("smooth," + SmoothCount);
             sb.AppendLine("rough," + RoughCount);
             sb.AppendLine("obs," + ObstacleBumpCount);
-            // V16 Fix B: STM is scratch — do not persist incomplete STM; LTM is primary.
+            // V16 Fix B: STM is scratch â€” do not persist incomplete STM; LTM is primary.
             sb.AppendLine("BEGIN_STM");
             sb.AppendLine("END_STM");
             sb.AppendLine("BEGIN_LTM");
@@ -1754,7 +1754,7 @@ namespace Evolution
                 }
             }
             brain.RecountLtm();
-            // V16 Fix B: STM is scratch — always clear after load (even if file had STM).
+            // V16 Fix B: STM is scratch â€” always clear after load (even if file had STM).
             brain.ClearStm();
             return brain;
         }

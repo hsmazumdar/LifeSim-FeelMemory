@@ -1,4 +1,0 @@
-FROZEN 2026-09-25 IST
-LifeSim_V16.1 = LifeSim_V16a = V16 minus dest-cell feel
-(keeps persistence, success-only promote, newest progressBin, source-cell feel)
-Do not change GK representation or reopen GK arm design on this tree.

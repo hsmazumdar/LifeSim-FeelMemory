@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Text;
 namespace Evolution
 {
     /// <summary>
-    /// Headless V16 harness (LifeSim_V16.1.exe --eval).
+    /// Headless LifeSim harness (LifeSim.exe --eval).
     /// TeacherSuccess in-sample / LOO / transfer / ablation + dest-hidden arms.
     /// Fix2 honesty. Temp mem only.
     /// </summary>
@@ -64,14 +64,14 @@ public static int Run(string[] args)
                 Directory.CreateDirectory(gkOut);
                 string gkMem = Path.Combine(gkOut, "temp_mem");
                 Directory.CreateDirectory(gkMem);
-                Console.WriteLine("EvalHarness V16.1 GK-LOO-ONLY. out=" + gkOut);
+                Console.WriteLine("EvalHarness GK-LOO-ONLY. out=" + gkOut);
                 var swGk = Stopwatch.StartNew();
                 var worldsGk = WorldLibrary.Primary.ToList();
                 WriteOptimalReference(worldsGk, Path.Combine(gkOut, "optimal_reference.csv"));
                 OptEnergyByWorld = BuildOptMap(worldsGk);
                 RunLooArm(worldsGk, gkMem, gkOut, false, "loo_goalknown");
                 var sbGk = new StringBuilder();
-                sbGk.AppendLine("# V16.1 GK LOO only");
+                sbGk.AppendLine("# GK LOO only");
                 sbGk.AppendLine("ElapsedMin=" + swGk.Elapsed.TotalMinutes.ToString("0.00"));
                 sbGk.AppendLine();
                 string csvGk = Path.Combine(gkOut, "loo_goalknown_summary.csv");
@@ -85,7 +85,7 @@ public static int Run(string[] args)
             string memDir = Path.Combine(outDir, "temp_mem");
             Directory.CreateDirectory(memDir);
 
-            Console.WriteLine("EvalHarness V16.1 starting. out=" + outDir);
+            Console.WriteLine("EvalHarness starting. out=" + outDir);
             var swAll = Stopwatch.StartNew();
             var worlds = WorldLibrary.Primary.ToList();
             Console.WriteLine("Primary: " + string.Join(", ", worlds.Select(w =>
@@ -279,11 +279,11 @@ File.WriteAllText(Path.Combine(outDir, "smoke_report.txt"),
                     return Path.GetFullPath(args[i + 1]);
             string stamp = DateTime.Now.ToString("yyyyMMdd");
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string candidate = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "EvalLogs", "review_v16_1_" + stamp));
+            string candidate = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "EvalLogs", "paper_results_" + stamp));
             try { Directory.CreateDirectory(candidate); return candidate; } catch { }
             // Portable fallback: repo-root EvalLogs (no machine-specific drive letters).
             string repoRoot = Path.GetFullPath(Path.Combine(baseDir, "..", "..", ".."));
-            return Path.GetFullPath(Path.Combine(repoRoot, "EvalLogs", "review_v16_1_" + stamp));
+            return Path.GetFullPath(Path.Combine(repoRoot, "EvalLogs", "paper_results_" + stamp));
         }
 
         static Dictionary<string, double> BuildOptMap(List<World> worlds)
@@ -648,7 +648,7 @@ File.WriteAllText(Path.Combine(outDir, "smoke_report.txt"),
             sb.AppendLine("Wall clock: " + elapsed.TotalMinutes.ToString("0.0") + " min");
             sb.AppendLine();
             sb.AppendLine("## Design");
-            sb.AppendLine("- TeacherSuccessÃ¢â€ â€™LTM; policy `brain-v16-feel-atlas`; feel n-gram atlas (no 8-neigh primary).");
+            sb.AppendLine("- TeacherSuccessÃ¢â€ â€™LTM; policy `brain-feel-atlas`; feel n-gram atlas (no 8-neigh primary).");
             sb.AppendLine("- Fix2 honesty preserved. Terrain Primary; Canvas retained in All.");
             sb.AppendLine();
             sb.AppendLine("## Fix2 LOO bar (PrefÃ¢â€ â€™LTM, goal-known)");
@@ -671,7 +671,7 @@ File.WriteAllText(Path.Combine(outDir, "smoke_report.txt"),
             sb.AppendLine("Compare V16 LOO means above to Fix2 bar. Dest-hidden tests whether success-path features alone guide without goal coordinates.");
             sb.AppendLine();
             sb.AppendLine("## Build");
-            sb.AppendLine("- `LifeSim_V16.1.sln` Ã¢â€ â€™ `EvolutionApp\\bin\\Debug\\LifeSim_V16.1.exe`");
+            sb.AppendLine("- `LifeSim.sln` Ã¢â€ â€™ `EvolutionApp\\bin\\Debug\\LifeSim.exe`");
             File.WriteAllText(Path.Combine(outDir, "VERDICT.md"), sb.ToString(), Encoding.UTF8);
         }
 

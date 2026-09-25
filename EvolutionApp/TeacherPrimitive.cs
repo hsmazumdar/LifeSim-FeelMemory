@@ -7,7 +7,7 @@ namespace Evolution
     /// <summary>
     /// V16 teacher / data-generating algorithm. Destination is KNOWN.
     /// Many noisy goal-seeking attempts; ONLY successful trajectories
-    /// contribute feel-atlas n-gram units (TeacherSuccess→LTM). Failures discarded.
+    /// contribute feel-atlas n-gram units (TeacherSuccessâ†’LTM). Failures discarded.
     /// </summary>
     public static class TeacherPrimitive
     {
@@ -281,7 +281,7 @@ namespace Evolution
             var feels = new System.Collections.Generic.List<FeelCode>(att.Path.Count);
             var cells = new System.Collections.Generic.List<Point>(att.Path.Count);
             var facings = new System.Collections.Generic.List<byte>(att.Path.Count);
-            // V16a ISO: REVERT Fix C — teacher feel/cell = SOURCE cell (pre-move / s.Cell), as V15.
+            // Snapshot note: REVERT Fix C â€” teacher feel/cell = SOURCE cell (pre-move / s.Cell), as prior source-cell baseline.
             // Keep all other V16 fixes (persistence, progressBin=newest, success-only, observe+loose).
             for (int i = 0; i < att.Path.Count; i++)
             {
