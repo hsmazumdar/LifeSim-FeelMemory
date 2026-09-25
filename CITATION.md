@@ -1,5 +1,5 @@
-﻿# Cite
+# Cite
 
-Manuscript in preparation (2026). Use this software snapshot as LifeSim V16.1 (SuccessWeighted, source-cell feel atlas).
+Manuscript in preparation (2026). Cite this software as the LifeSim publication snapshot (success-weighted unique path-unit promotion; source-cell feel atlas).
 
-Frozen: 2026-09-25 (Asia/Calcutta).
+Frozen artifact date: 2026-09-25 (Asia/Calcutta).

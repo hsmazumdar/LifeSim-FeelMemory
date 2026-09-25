@@ -1,12 +1,12 @@
 @echo off
 setlocal EnableExtensions
 cd /d "%~dp0"
-title LifeSim V16.1 — full Fix2 eval
-echo Building (if needed) and running full Fix2 honest eval...
+title LifeSim — full honest eval
+echo Building (if needed) and running full honest eval...
 echo.
 
-set "SLN=%CD%\LifeSim_V16.1.sln"
-set "EXE=%CD%\EvolutionApp\bin\Debug\LifeSim_V16.1.exe"
+set "SLN=%CD%\LifeSim.sln"
+set "EXE=%CD%\EvolutionApp\bin\Debug\LifeSim.exe"
 set "OUT=%CD%\EvalLogs\review_rerun"
 
 set "MSBUILD="

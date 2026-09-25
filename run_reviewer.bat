@@ -2,19 +2,19 @@
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
-title LifeSim V16.1 — reviewer launcher
+title LifeSim — reviewer launcher
 echo.
-echo  LifeSim V16.1 reviewer launcher
+echo  LifeSim reviewer launcher
 echo  Repo: %CD%
 echo.
 
-set "SLN=%CD%\LifeSim_V16.1.sln"
-set "EXE=%CD%\EvolutionApp\bin\Debug\LifeSim_V16.1.exe"
+set "SLN=%CD%\LifeSim.sln"
+set "EXE=%CD%\EvolutionApp\bin\Debug\LifeSim.exe"
 set "OUT_ROOT=%CD%\EvalLogs"
 
 call :find_msbuild
 if errorlevel 1 (
-  echo [ERROR] MSBuild not found. Install Visual Studio 2022 Build Tools /.NET desktop workload.
+  echo [ERROR] MSBuild not found. Install Visual Studio 2022 Build Tools / .NET desktop workload.
   pause
   exit /b 1
 )
@@ -23,10 +23,10 @@ if errorlevel 1 (
 echo.
 echo  ----------------------------------------
 echo   1  Build Debug
-echo   2  Full Fix2 honest eval  (--eval)     [paper numbers]
-echo   3  Goal-known LOO only    (--gk-loo)
-echo   4  Smoke self-test        (--smoke)
-echo   5  Teacher diagnostic     (--teacher-diag)
+echo   2  Full honest eval  (--eval)     [paper numbers]
+echo   3  Goal-known LOO only (--gk-loo)
+echo   4  Smoke self-test     (--smoke)
+echo   5  Teacher diagnostic  (--teacher-diag)
 echo   6  Open GUI
 echo   7  Build + full eval
 echo   0  Exit
@@ -57,9 +57,9 @@ goto do_eval
 :do_eval
 call :ensure_exe
 if errorlevel 1 goto menu
-set "OUT=%OUT_ROOT%\review_rerun_%DATE:~-4%%DATE:~3,2%%DATE:~0,2%_%RANDOM%"
+set "OUT=%OUT_ROOT%\review_rerun"
 echo.
-echo  Running full Fix2 eval...
+echo  Running full honest eval...
 echo  Out: %OUT%
 "%EXE%" --eval --out "%OUT%"
 echo.
@@ -71,7 +71,7 @@ goto menu
 :do_gk
 call :ensure_exe
 if errorlevel 1 goto menu
-set "OUT=%OUT_ROOT%\gk_loo_%RANDOM%"
+set "OUT=%OUT_ROOT%\gk_loo"
 echo  Running GK LOO...
 "%EXE%" --gk-loo --out "%OUT%"
 echo  Out: %OUT%
@@ -81,7 +81,7 @@ goto menu
 :do_smoke
 call :ensure_exe
 if errorlevel 1 goto menu
-set "OUT=%OUT_ROOT%\smoke_%RANDOM%"
+set "OUT=%OUT_ROOT%\smoke"
 echo  Running smoke...
 "%EXE%" --smoke --out "%OUT%"
 echo  Out: %OUT%
@@ -91,7 +91,7 @@ goto menu
 :do_teacher
 call :ensure_exe
 if errorlevel 1 goto menu
-set "OUT=%OUT_ROOT%\teacher_diag_%RANDOM%"
+set "OUT=%OUT_ROOT%\teacher_diag"
 echo  Running teacher-diag...
 "%EXE%" --teacher-diag --out "%OUT%"
 echo  Out: %OUT%

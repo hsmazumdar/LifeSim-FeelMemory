@@ -1,10 +1,10 @@
-﻿# LifeSim V16 â€” Verdict
+# LifeSim V16 â€” Verdict
 
 Date: 2026-09-25 13:01 IST
 Wall clock: 14.3 min
 
 ## Design
-- TeacherSuccessâ†’LTM; policy `brain-v16-feel-atlas`; feel n-gram atlas (no 8-neigh primary).
+- TeacherSuccessâ†’LTM; policy `brain-feel-atlas`; feel n-gram atlas (no 8-neigh primary).
 - Fix2 honesty preserved. Terrain Primary; Canvas retained in All.
 
 ## Fix2 LOO bar (Prefâ†’LTM, goal-known)
@@ -48,4 +48,4 @@ Terrain-D,5,0,0,0,0,18.7896,3.4843,18.7896,3.4843
 Compare V16 LOO means above to Fix2 bar. Dest-hidden tests whether success-path features alone guide without goal coordinates.
 
 ## Build
-- `LifeSim_V16.1.sln` â†’ `EvolutionApp\bin\Debug\LifeSim_V16.1.exe`
+- `LifeSim.sln` â†’ `EvolutionApp\bin\Debug\LifeSim.exe`
