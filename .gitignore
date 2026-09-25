@@ -1,0 +1,25 @@
+﻿## Build
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+*.exe
+*.dll
+*.ilk
+packages/
+.vs/
+
+## Runtime / local
+memory-dat/
+worlds/
+**/temp_mem/
+EvalLogs/**/temp_mem/
+*.mem
+*.log
+
+## OS
+Thumbs.db
+Desktop.ini
+.DS_Store
