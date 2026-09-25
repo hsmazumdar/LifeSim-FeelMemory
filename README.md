@@ -1,14 +1,14 @@
-﻿# LifeSim (V16.1) — reviewer mirror
+# LifeSim (V16.1) — reviewer mirror
 
 Frozen champion snapshot of **success-weighted unique path-unit promotion** of **source-cell feel n-grams** for procedural terrain navigation (Terrain-A..D).
 
-This folder is a clean copy of `LifeSim_V16.1` intended for GitHub / artifact sharing. Lab-only notes, patch scripts, and runtime dumps were removed.
+Clean copy of `LifeSim_V16.1` for GitHub / artifact sharing. Lab-only notes, patch scripts, Word drafts, and runtime dumps were removed. The only code change vs the lab freeze is a portable `EvalLogs` fallback (no hard-coded `K:\` path).
 
 ## Claim (for the accompanying paper)
 
 Success-weighted unique path-unit promotion of source-cell feel n-grams yields honest leave-one-out goal-known energy gains on procedural Terrain-A..D; dest-cell feel, frequency-ranked TwoColumn LTM, and SuccessWeighted+TwoColumn append do not improve that transfer.
 
-**Locked result (goal-known LOO energy_gain_pct, mean ± std, n=5 seeds):**
+**Locked result (goal-known LOO `energy_gain_pct`, mean ± std, n=5 seeds):**
 
 | World | GK LOO |
 |-------|--------|
@@ -41,7 +41,7 @@ Output: `EvolutionApp\bin\Debug\LifeSim_V16.1.exe`
 EvolutionApp\bin\Debug\LifeSim_V16.1.exe --eval --out EvalLogs\review_rerun
 ```
 
-Other headless modes:
+Other headless modes (see `Program.cs`):
 
 ```bat
 LifeSim_V16.1.exe --smoke --out EvalLogs\smoke
@@ -49,23 +49,22 @@ LifeSim_V16.1.exe --gk-loo --out EvalLogs\gk_loo
 LifeSim_V16.1.exe --teacher-diag --out EvalLogs\teacher_diag
 ```
 
-Protocol notes (honesty): ClearStm / CloneFrozenLtmOnly; EvalFrozenPaired; teacher success → LTM only; Primary worlds Terrain-A..D.
+Honesty protocol: ClearStm / CloneFrozenLtmOnly; EvalFrozenPaired; teacher success → LTM only; Primary worlds Terrain-A..D.
 
 ## Layout
 
 ```
 GitHub_mirror/
   LifeSim_V16.1.sln
-  EvolutionApp/          # C# sources (BrainMemory, EvalHarness, …)
+  EvolutionApp/           # C# sources
   EvalLogs/review_v16_1_20260925/   # frozen CSV + SUMMARY/VERDICT
   FREEZE_V16.1.txt
   README.md
+  CITATION.md
   .gitignore
 ```
 
-## Ablations (not in this mirror)
-
-Sibling lab trees (not competing methods):
+## Ablations (sibling lab trees; not in this mirror)
 
 | Tree | Role |
 |------|------|
