@@ -1,0 +1,5 @@
+﻿world,n,energy_gain_pct_mean,energy_gain_pct_std,goal_rate_gain_pp_mean,goal_rate_gain_pp_std,brain_gap_to_opt_mean,brain_gap_to_opt_std,nobrain_gap_to_opt_mean,nobrain_gap_to_opt_std
+Terrain-A,5,78.6323,4.2822,0,0,4.4894,0.9899,21.084,3.1726
+Terrain-B,5,78.0599,2.3886,0,0,4.5299,0.9236,20.5721,2.9239
+Terrain-C,5,61.3334,11.4259,0,0,5.2579,1.1191,13.9141,2.398
+Terrain-D,5,60.9844,6.3898,0,0,7.4157,1.1409,19.0499,0.9219
