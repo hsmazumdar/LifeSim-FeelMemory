@@ -21,6 +21,8 @@ Dest-hidden LOO (stated limit): A 19.7, B 46.3, **C −24.5**, D −5.0. Feel-on
 
 Canonical numbers and protocol: `EvalLogs/paper_results/SUMMARY.md` and `VERDICT.md`.
 
+Paper for review: `LifeSim_Paper.docx` (figures in `paper_figures/`).
+
 ## Quick start (readers)
 
 Double-click **`run_menu.bat`** for a menu (build / full honest eval / GK LOO / smoke / teacher-diag / GUI).
