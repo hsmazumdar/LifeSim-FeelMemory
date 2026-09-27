@@ -2,7 +2,7 @@
 
 Publication snapshot of **LifeSim**: success-weighted unique path-unit promotion of **source-cell feel n-grams** for procedural terrain navigation, with a tabular n-gram behavior-cloning (**TabularNgramBC**) baseline under the same teacher trajectories and honest leave-one-out protocol.
 
-This repository is a self-contained artifact for manuscript reviewers. It is not a multi-version lab archive; please evaluate the method from the code and frozen results here only.
+This repository is a self-contained **code and frozen-results** artifact for manuscript reviewers. It is not a multi-version lab archive; please evaluate the method from the code and frozen results here only. The manuscript PDF/DOCX is **not** hosted in this repository; it is available from the corresponding author upon request or after acceptance.
 
 ## Claim (accompanying paper)
 
@@ -40,7 +40,7 @@ Dest-hidden LOO (stated limit): A 19.7, B 46.3, **C −24.5**, D −5.0. Feel-on
 
 Canonical CSV + VERDICT: `EvalLogs/paper_results/` (EmptyLTM / dest-hidden suite) and `EvalLogs/paper_results/baseline_phase*/` (SW vs BC).
 
-**Manuscript for review:** `LifeSim_Paper_v7.docx` (changelog: `LifeSim_Paper_v7_CHANGELOG.md`; figures in `paper_figures/`). Prior draft: `LifeSim_Paper_v6.docx`.
+**Manuscript:** available from the corresponding author (Himanshu S. Mazumdar, hsmazumdar@ddu.ac.in) upon request or after acceptance. Result figures for verification are under `paper_figures/`.
 
 ## Quick start (reviewers)
 
@@ -112,9 +112,7 @@ Honesty protocol: ClearStm / CloneFrozenLtmOnly; EvalFrozenPaired; teacher succe
   EvalLogs/paper_results/baseline_phaseA/
   EvalLogs/paper_results/baseline_phaseB/
   EvalLogs/paper_results/baseline_phaseC_n25/
-  LifeSim_Paper_v7.docx
-  LifeSim_Paper_v7_CHANGELOG.md
-  paper_figures/
+  paper_figures/                # result figures (not the manuscript file)
   FREEZE.txt
   run_reviewer.bat
   run_full_eval.bat
@@ -125,7 +123,9 @@ Honesty protocol: ClearStm / CloneFrozenLtmOnly; EvalFrozenPaired; teacher succe
 
 ## Data and code availability
 
-Reviewer mirror: https://github.com/hsmazumdar/LifeSim-FeelMemory
+Reviewer mirror (code + frozen results): https://github.com/hsmazumdar/LifeSim-FeelMemory
+
+Manuscript PDF/DOCX: corresponding author upon request / after acceptance (not in this repository).
 
 ## Ablations (described in the paper; not competing releases)
 

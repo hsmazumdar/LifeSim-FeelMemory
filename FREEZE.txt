@@ -1,4 +1,4 @@
-﻿FROZEN SNAPSHOT - LifeSim (publication artifact)
+FROZEN SNAPSHOT - LifeSim (publication artifact)
 
 Method: success-weighted unique path-unit promotion of source-cell feel n-grams
 (SuccessWeighted), compared against a tabular n-gram behavior-cloning baseline
@@ -13,5 +13,6 @@ Canonical baseline packs:
   EvalLogs/paper_results/baseline_phaseC_n25/ (n=25, 20 worlds; paper headline)
 
 EmptyLTM / dest-hidden locked SW tables remain under EvalLogs/paper_results/.
-Manuscript: LifeSim_Paper_v7.docx (changelog: LifeSim_Paper_v7_CHANGELOG.md).
+Manuscript PDF/DOCX is NOT in this repository; available from the corresponding
+author upon request or after acceptance. Result figures may remain under paper_figures/.
 Do not treat sibling lab folders as alternate releases of this repository.

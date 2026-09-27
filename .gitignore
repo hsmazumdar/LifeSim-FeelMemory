@@ -28,22 +28,18 @@ Desktop.ini
 ~$*
 *$*.docx
 
-## Local paper build / drafts (do not publish)
+## Manuscripts and local paper build (do NOT publish)
+LifeSim_Paper*.docx
+LifeSim_Paper*.docx.*
+LifeSim_Paper*_CHANGELOG.md
+LifeSim_Paper*_BUILD_NOTE.txt
+ClaudeReview.docx
 _build_paper_*.py
 _build_paper_*.py.bak*
 _relabel_*.py
 __pycache__/
-ClaudeReview.docx
-LifeSim_Paper_FrontMatter.docx
-LifeSim_Paper_v2*
-LifeSim_Paper_v3*
-LifeSim_Paper_v4*
-LifeSim_Paper_v5*
+Paper/
 *.bak_*
 *.docx.bak*
-Paper/LifeSim_Paper_v2*
-Paper/LifeSim_Paper_v3*
-Paper/LifeSim_Paper_v4*
-Paper/LifeSim_Paper_v5*
-Paper/LifeSim_Paper_FrontMatter*
-Paper/*_write.docx
+_tmp_*
+_v7_head.txt
