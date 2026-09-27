@@ -1,8 +1,10 @@
 @echo off
 setlocal EnableExtensions
 cd /d "%~dp0"
-title LifeSim — full honest eval
-echo Building (if needed) and running full honest eval...
+title LifeSim - full honest eval
+echo Building (if needed) and running full honest eval (--eval)...
+echo For SW vs TabularNgramBC baseline, use run_reviewer.bat option 4/5
+echo   or: LifeSim.exe --eval-baseline --seeds 5 --worlds 4 --out EvalLogs\baseline_short
 echo.
 
 set "SLN=%CD%\LifeSim.sln"

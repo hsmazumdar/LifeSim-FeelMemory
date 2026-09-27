@@ -53,6 +53,12 @@ namespace Evolution
         /// <summary>V13 dest-hidden arm: no goal-coordinate bias / FaceToward(goal). Arrival detection still works.</summary>
         public bool HideDestination { get; set; } = false;
 
+        /// <summary> tabular n-gram BC policy. When set, exact-key lookup steers; miss = EmptyLTM reactive.</summary>
+        public TabularNgramBC TabularBC { get; set; }
+        public int BcHits { get; private set; }
+        public int BcMisses { get; private set; }
+        readonly List<byte> _bcFeelHist = new List<byte>(64);
+
         public int StepsSmooth { get; private set; }
         public int StepsMedium { get; private set; }
         public int StepsRough { get; private set; }
@@ -111,6 +117,9 @@ namespace Evolution
             _prevCell = startCell;
             NoteVisit(startCell);
             LastFeel = MotorMemory.Feel.Unknown;
+            _bcFeelHist.Clear();
+            BcHits = 0;
+            BcMisses = 0;
             Brain.MarkEpisodeStart();
         }
 
@@ -372,6 +381,26 @@ namespace Evolution
                 FaceToward(world.GoalCell);
             }
 
+            // TabularNgramBC: push SOURCE-cell feel (same encoding as teacher) before lookup.
+            bool bcActive = TabularBC != null;
+            int bcRel = -1;
+            bool bcHit = false;
+            if (bcActive)
+            {
+                FeelCode srcFeel = TabularNgramBC.FeelAtSource(world, Cell);
+                _bcFeelHist.Add((byte)srcFeel);
+                int support; string mkey;
+                if (TabularBC.TryLookup(_bcFeelHist, out bcRel, out support, out mkey) && bcRel >= 0 && bcRel <= 7)
+                {
+                    bcHit = true;
+                    BcHits++;
+                }
+                else
+                {
+                    BcMisses++;
+                }
+            }
+
             double[] weights = new double[8];
             double sum = 0;
             int legal = 0;
@@ -396,7 +425,32 @@ namespace Evolution
                 var nextCell = new Point(nx, ny);
                 float roughness = world.CellRoughness(nextCell);
 
-                if (UseBrain && sense != null)
+                if (bcActive)
+                {
+                    // Hit: strong boost on matched relative move. Miss: EmptyLTM reactive (terrain).
+                    if (bcHit)
+                    {
+                        if (rel == bcRel) w *= 4.0;
+                        else w *= 0.35;
+                        w *= (1.0 - 0.35 * roughness);
+                        var knownBc = Motor.Get(nextCell);
+                        if (knownBc == MotorMemory.Feel.Obstacle) w *= 0.10;
+                        else if (knownBc == MotorMemory.Feel.Rough) w *= 0.70;
+                        else if (knownBc == MotorMemory.Feel.Smooth) w *= 1.15;
+                    }
+                    else
+                    {
+                        double terrainWeight = 1.0 - 0.7 * roughness;
+                        w *= terrainWeight;
+                        var knownMiss = Motor.Get(nextCell);
+                        if (knownMiss == MotorMemory.Feel.Obstacle) w *= 0.15;
+                        else if (knownMiss == MotorMemory.Feel.Rough) w *= 0.45;
+                        else if (knownMiss == MotorMemory.Feel.Medium) w *= 0.75;
+                        else if (knownMiss == MotorMemory.Feel.Smooth) w *= 1.35;
+                        w *= (1.0 - 0.5 * roughness);
+                    }
+                }
+                else if (UseBrain && sense != null)
                 {
                     // Confidence-gated blend: unmatched LTM must not strip terrain bias (transfer poison).
                     double conf;

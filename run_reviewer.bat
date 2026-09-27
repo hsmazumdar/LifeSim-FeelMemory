@@ -2,7 +2,7 @@
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
-title LifeSim — reviewer launcher
+title LifeSim - reviewer launcher
 echo.
 echo  LifeSim reviewer launcher
 echo  Repo: %CD%
@@ -23,24 +23,31 @@ if errorlevel 1 (
 echo.
 echo  ----------------------------------------
 echo   1  Build Debug
-echo   2  Full honest eval  (--eval)     [paper numbers]
+echo   2  Full honest eval  (--eval)          [SW EmptyLTM suite]
 echo   3  Goal-known LOO only (--gk-loo)
-echo   4  Smoke self-test     (--smoke)
-echo   5  Teacher diagnostic  (--teacher-diag)
-echo   6  Open GUI
-echo   7  Build + full eval
+echo   4  Baseline short check (--eval-baseline --seeds 5 --worlds 4)
+echo   5  Baseline Phase B paper-scale (--eval-baseline --seeds 25)
+echo   6  Smoke self-test     (--smoke)
+echo   7  Teacher diagnostic  (--teacher-diag)
+echo   8  Open GUI
+echo   9  Build + full eval
 echo   0  Exit
 echo  ----------------------------------------
+echo  Optional long run (run manually):
+echo    LifeSim.exe --eval-baseline --seeds 25 --worlds 20 --procedural 16 --base-seed 9001 --out EvalLogs\baseline_phaseC_rerun
+echo  ----------------------------------------
 set "CHOICE="
-set /p CHOICE=  Choose [0-7]: 
+set /p CHOICE=  Choose [0-9]: 
 
 if "%CHOICE%"=="1" goto do_build
 if "%CHOICE%"=="2" goto do_eval
 if "%CHOICE%"=="3" goto do_gk
-if "%CHOICE%"=="4" goto do_smoke
-if "%CHOICE%"=="5" goto do_teacher
-if "%CHOICE%"=="6" goto do_gui
-if "%CHOICE%"=="7" goto do_build_eval
+if "%CHOICE%"=="4" goto do_baseline_short
+if "%CHOICE%"=="5" goto do_baseline_phaseB
+if "%CHOICE%"=="6" goto do_smoke
+if "%CHOICE%"=="7" goto do_teacher
+if "%CHOICE%"=="8" goto do_gui
+if "%CHOICE%"=="9" goto do_build_eval
 if "%CHOICE%"=="0" exit /b 0
 echo  Invalid choice.
 goto menu
@@ -78,6 +85,27 @@ echo  Out: %OUT%
 pause
 goto menu
 
+:do_baseline_short
+call :ensure_exe
+if errorlevel 1 goto menu
+set "OUT=%OUT_ROOT%\baseline_short"
+echo  Running baseline short check (SW vs TabularNgramBC, n=5, A-D)...
+"%EXE%" --eval-baseline --seeds 5 --worlds 4 --out "%OUT%"
+echo  Out: %OUT%
+pause
+goto menu
+
+:do_baseline_phaseB
+call :ensure_exe
+if errorlevel 1 goto menu
+set "OUT=%OUT_ROOT%\baseline_phaseB_rerun"
+echo  Running baseline Phase B (n=25, Terrain-A..D)...
+echo  This can take ~10-20 minutes.
+"%EXE%" --eval-baseline --seeds 25 --out "%OUT%"
+echo  Out: %OUT%
+pause
+goto menu
+
 :do_smoke
 call :ensure_exe
 if errorlevel 1 goto menu
@@ -107,7 +135,7 @@ goto menu
 
 :ensure_exe
 if exist "%EXE%" exit /b 0
-echo  EXE missing — building first...
+echo  EXE missing - building first...
 call :build
 if not exist "%EXE%" (
   echo [ERROR] Build did not produce: %EXE%

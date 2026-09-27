@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +32,25 @@ namespace Evolution
             return All.FirstOrDefault(w => w.Name == name) ?? Primary[0];
         }
 
-        static void TrySavePreviews(IReadOnlyList<World> worlds)
+        
+        /// <summary>
+        /// Generate N procedural terrains (Terrain-01..) without mutating Primary A-D.
+        /// Caller may merge with Primary for expanded LOO. Does not replace static Primary/All.
+        /// </summary>
+        public static IReadOnlyList<World> GenerateProcedural(int count, int baseSeed = 9001)
+        {
+            return CanvasWorldGenerator.GenerateProceduralTerrains(count, baseSeed);
+        }
+
+        /// <summary>Primary A-D plus procedural Terrain-01..N (new list; A-D preserved).</summary>
+        public static IReadOnlyList<World> PrimaryPlusProcedural(int proceduralCount, int baseSeed = 9001)
+        {
+            var list = new List<World>();
+            list.AddRange(Primary);
+            list.AddRange(GenerateProcedural(proceduralCount, baseSeed));
+            return list;
+        }
+static void TrySavePreviews(IReadOnlyList<World> worlds)
         {
             try
             {
@@ -59,8 +77,6 @@ namespace Evolution
                 candidates.Add(Path.GetFullPath(Path.Combine(baseDir, "worlds")));
             }
             catch { }
-            candidates.Add(@"F:\_September2026\EvolutionLife\LifeSim_V14\worlds");
-            candidates.Add(@"C:\Users\Admin\agent-tools\LifeSim_V14_out\worlds");
             foreach (var c in candidates)
             {
                 try

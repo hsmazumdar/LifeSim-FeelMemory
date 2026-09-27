@@ -1,4 +1,4 @@
-﻿namespace Evolution
+namespace Evolution
 {
     partial class LifeSim
     {
@@ -103,7 +103,7 @@
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(104, 21);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "LifeSim V16";
+            this.lblTitle.Text = "LifeSim";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblWorld
@@ -361,7 +361,7 @@
             this.MinimumSize = new System.Drawing.Size(458, 331);
             this.Name = "LifeSim";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "LifeSim V16";
+            this.Text = "LifeSim";
             this.Load += new System.EventHandler(this.LifeSim_Load);
             this.Shown += new System.EventHandler(this.LifeSim_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LifeSim_KeyDown);

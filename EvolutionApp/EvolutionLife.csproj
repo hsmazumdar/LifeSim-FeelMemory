@@ -64,6 +64,7 @@
     <Compile Include="WorldLibrary.cs" />
     <Compile Include="TeacherPrimitive.cs" />
     <Compile Include="EvalHarness.cs" />
+    <Compile Include="TabularNgramBC.cs" />
     <Compile Include="CanvasWorldGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,4 @@
-﻿## Build
+## Build
 bin/
 obj/
 *.user
@@ -28,3 +28,22 @@ Desktop.ini
 ~$*
 *$*.docx
 
+## Local paper build / drafts (do not publish)
+_build_paper_*.py
+_build_paper_*.py.bak*
+_relabel_*.py
+__pycache__/
+ClaudeReview.docx
+LifeSim_Paper_FrontMatter.docx
+LifeSim_Paper_v2*
+LifeSim_Paper_v3*
+LifeSim_Paper_v4*
+LifeSim_Paper_v5*
+*.bak_*
+*.docx.bak*
+Paper/LifeSim_Paper_v2*
+Paper/LifeSim_Paper_v3*
+Paper/LifeSim_Paper_v4*
+Paper/LifeSim_Paper_v5*
+Paper/LifeSim_Paper_FrontMatter*
+Paper/*_write.docx

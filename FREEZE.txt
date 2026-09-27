@@ -1,5 +1,17 @@
-﻿FROZEN SNAPSHOT — LifeSim (publication artifact)
+﻿FROZEN SNAPSHOT - LifeSim (publication artifact)
 
-Method: success-weighted unique path-unit promotion of source-cell feel n-grams.
-Protocol: Fix2 honest leave-one-out on procedural Terrain-A..D.
+Method: success-weighted unique path-unit promotion of source-cell feel n-grams
+(SuccessWeighted), compared against a tabular n-gram behavior-cloning baseline
+(TabularNgramBC) and EmptyLTM reactive control.
+
+Protocol: Fix2 honesty (ClearStm / CloneFrozenLtmOnly); leave-one-out goal-known
+on Terrain-A..D and expanded procedural suites.
+
+Canonical baseline packs:
+  EvalLogs/paper_results/baseline_phaseA/     (n=5, A-D)
+  EvalLogs/paper_results/baseline_phaseB/     (n=25, A-D)
+  EvalLogs/paper_results/baseline_phaseC_n25/ (n=25, 20 worlds; paper headline)
+
+EmptyLTM / dest-hidden locked SW tables remain under EvalLogs/paper_results/.
+Manuscript: LifeSim_Paper_v7.docx (changelog: LifeSim_Paper_v7_CHANGELOG.md).
 Do not treat sibling lab folders as alternate releases of this repository.
