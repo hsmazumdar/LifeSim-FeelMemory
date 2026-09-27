@@ -18,6 +18,8 @@ namespace Evolution
                     if (string.Equals(args[i], "--eval", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--eval-gk-loo", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--gk-loo", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(args[i], "--eval-baseline", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(args[i], "--baseline", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "-eval", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--smoke", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--teacher-diag", StringComparison.OrdinalIgnoreCase))

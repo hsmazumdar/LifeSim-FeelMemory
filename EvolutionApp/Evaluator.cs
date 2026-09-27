@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -569,6 +569,183 @@ namespace Evolution
                 log.AppendLine("brain_gain=" + gain.ToString("+0.0;-0.0;0.0"));
             }
             return result;
+        }
+
+
+        /// <summary>
+        ///  train SuccessWeighted LTM + TabularNgramBC from the SAME TeacherSuccess trajectories.
+        /// BC uses flat majority counts; SW uses existing EndTourAndPromote success-weight path.
+        /// </summary>
+        public static void TrainSwAndBcFromTeacher(
+            IReadOnlyList<World> worlds,
+            int attemptsPerWorld,
+            int maxSteps,
+            Random rng,
+            out BrainMemory swBrain,
+            out TabularNgramBC bc,
+            out TeacherPopulateStats swStats,
+            out TeacherPopulateStats bcStats,
+            Action<string> progress = null)
+        {
+            // Joint train: SAME TeacherSuccess trajectories fill SW LTM and flat BC table.
+            if (rng == null) rng = new Random();
+            if (attemptsPerWorld < 1) attemptsPerWorld = 250;
+            if (maxSteps < 1) maxSteps = DefaultMaxSteps;
+            swBrain = new BrainMemory();
+            bc = new TabularNgramBC();
+            swBrain.ClearPreferredVotes();
+            bc.Clear();
+            swStats = new TeacherPopulateStats();
+            bcStats = new TeacherPopulateStats();
+
+            foreach (var world in worlds)
+            {
+                if (progress != null) progress("JointTeacher " + world.Name + "...");
+                int successes = 0, failures = 0;
+
+                var opt = TeacherPrimitive.DijkstraSuccess(world);
+                if (opt.ReachedGoal)
+                {
+                    // SW ingest via public tour API (same as TeacherPrimitive.IngestPath)
+                    IngestSuccessIntoSw(swBrain, opt, world);
+                    bc.IngestPath(opt, world);
+                    successes++;
+                    swStats.SuccessPaths++;
+                    swStats.SuccessSteps += opt.Path.Count;
+                    bcStats.SuccessPaths++;
+                    bcStats.SuccessSteps += opt.Path.Count;
+                }
+
+                for (int a = 0; a < attemptsPerWorld; a++)
+                {
+                    double temp = 0.25 + rng.NextDouble() * 0.55;
+                    var att = TeacherPrimitive.TryReachGoal(world, rng, maxSteps, temp);
+                    if (att.ReachedGoal && att.Path != null && att.Path.Count > 0)
+                    {
+                        IngestSuccessIntoSw(swBrain, att, world);
+                        bc.IngestPath(att, world);
+                        successes++;
+                        swStats.SuccessPaths++;
+                        swStats.SuccessSteps += att.Path.Count;
+                        bcStats.SuccessPaths++;
+                        bcStats.SuccessSteps += att.Path.Count;
+                    }
+                    else
+                    {
+                        failures++;
+                        swStats.FailedAttempts++;
+                        bcStats.FailedAttempts++;
+                    }
+                }
+                swStats.WorldSuccesses[world.Name] = successes;
+                swStats.WorldFailures[world.Name] = failures;
+                bcStats.WorldSuccesses[world.Name] = successes;
+                bcStats.WorldFailures[world.Name] = failures;
+            }
+
+            swStats.RulesWritten = swBrain.PopulateLtmFromTeacherSuccess(0.5f, swBrain.LtmCapacity);
+            swStats.PreferredSignatures = swBrain.PreferredVoteSignatureCount;
+            swStats.LtmCount = swBrain.LtmCount;
+            bcStats.RulesWritten = bc.KeyCount;
+            bcStats.PreferredSignatures = bc.TotalVotes;
+            bcStats.LtmCount = bc.KeyCount;
+        }
+
+        static void IngestSuccessIntoSw(BrainMemory brain, TeacherPrimitive.AttemptResult att, World world)
+        {
+            // Mirror TeacherPrimitive.IngestPath (source-cell feel, Smooth/Medium/Rough/Obstacle thresholds).
+            float boost = 1.0f;
+            if (att.Steps > 0)
+            {
+                double avg = att.Energy / att.Steps;
+                boost = (float)(0.7 + 0.6 * (1.0 / (1.0 + avg)));
+            }
+            if (att.Path == null || att.Path.Count == 0) return;
+            if (world != null) brain.ConfigureForWorld(world);
+            if (att.Path.Count > brain.MaxPathSteps) return;
+
+            var senses = new System.Collections.Generic.List<DirCellKind[]>(att.Path.Count);
+            var moves = new System.Collections.Generic.List<int>(att.Path.Count);
+            var feels = new System.Collections.Generic.List<FeelCode>(att.Path.Count);
+            var cells = new System.Collections.Generic.List<System.Drawing.Point>(att.Path.Count);
+            var facings = new System.Collections.Generic.List<byte>(att.Path.Count);
+            for (int i = 0; i < att.Path.Count; i++)
+            {
+                var s = att.Path[i];
+                senses.Add(s.Sense);
+                moves.Add(s.MoveDir);
+                cells.Add(s.Cell);
+                facings.Add((byte)(((s.Facing % 8) + 8) % 8));
+                feels.Add(TabularNgramBC.FeelAtSource(world, s.Cell));
+            }
+            brain.IngestTeacherSuccessTour(senses, moves, feels, cells, facings,
+                world != null ? world.StartCell : System.Drawing.Point.Empty,
+                world != null ? world.GoalCell : System.Drawing.Point.Empty,
+                boost);
+        }
+
+        /// <summary>Frozen eval of one named policy: SuccessWeighted | TabularNgramBC | EmptyLTM.</summary>
+        public static EvalRunTotals EvalFrozenNamedPolicy(
+            World world,
+            string policyName,
+            BrainMemory swBrain,
+            TabularNgramBC bc,
+            int runs,
+            int maxSteps,
+            int pairedBaseSeed,
+            bool hideDestination = false)
+        {
+            var totals = new EvalRunTotals { Runs = runs, Label = policyName + " on " + world.Name };
+            for (int r = 1; r <= runs; r++)
+            {
+                int episodeSeed = MixEpisodeSeed(pairedBaseSeed, r);
+                var robot = new Robot(world.StartCell, new Random(episodeSeed));
+                robot.LearnEnabled = false;
+                robot.RecordSenseTrace = false;
+                robot.ClearBrainOnReset = false;
+                robot.HideDestination = hideDestination;
+                if (string.Equals(policyName, "SuccessWeighted", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(policyName, "with_brain", StringComparison.OrdinalIgnoreCase))
+                {
+                    robot.UseBrain = true;
+                    robot.TabularBC = null;
+                    robot.SetBrain(swBrain != null ? swBrain.CloneFrozenLtmOnly() : new BrainMemory());
+                }
+                else if (string.Equals(policyName, "TabularNgramBC", StringComparison.OrdinalIgnoreCase) ||
+                         string.Equals(policyName, TabularNgramBC.MechanismName, StringComparison.OrdinalIgnoreCase))
+                {
+                    robot.UseBrain = false; // BC overrides via TabularBC; miss = reactive
+                    robot.TabularBC = bc;
+                    robot.SetBrain(new BrainMemory());
+                }
+                else // EmptyLTM / no_brain
+                {
+                    robot.UseBrain = false;
+                    robot.TabularBC = null;
+                    robot.SetBrain(new BrainMemory());
+                }
+
+                int ticks = 0;
+                int safety = maxSteps * 20;
+                while (!robot.IsOnGoal && robot.DecisionSteps < maxSteps && ticks < safety)
+                {
+                    robot.Tick(world);
+                    ticks++;
+                }
+                bool goal = robot.IsOnGoal;
+                if (goal)
+                {
+                    totals.GoalsReached++;
+                    totals.EnergyToGoalSum += robot.TotalEnergy;
+                }
+                totals.TotalEnergy += robot.TotalEnergy;
+                totals.StepsSmooth += robot.StepsSmooth;
+                totals.StepsMedium += robot.StepsMedium;
+                totals.StepsRough += robot.StepsRough;
+                totals.StepsObstacle += robot.StepsOnObstacle;
+                totals.DecisionSteps += robot.DecisionSteps;
+            }
+            return totals;
         }
 
         public static string SavePrefToLtmLog(StringBuilder log)

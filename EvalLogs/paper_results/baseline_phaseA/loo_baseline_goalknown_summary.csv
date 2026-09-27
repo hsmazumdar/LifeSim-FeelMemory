@@ -1,0 +1,5 @@
+﻿world,n,SW_energy_mean,SW_energy_std,BC_energy_mean,BC_energy_std,Empty_energy_mean,Empty_energy_std,SW_gain_pct_vs_Empty_mean,SW_gain_pct_vs_Empty_std,BC_gain_pct_vs_Empty_mean,BC_gain_pct_vs_Empty_std,SW_minus_BC_gain_pp_mean,SW_goal_mean,BC_goal_mean,Empty_goal_mean
+Terrain-A,5,30.0858,4.4812,114.8386,20.1226,122.6493,14.8352,75.1505,5.0783,5.4223,20.3386,69.7283,1,1,1
+Terrain-B,5,25.8377,4.7168,95.1649,19.9817,138.746,26.8339,80.838,4.8691,29.603,19.4121,51.235,1,1,0.9933
+Terrain-C,5,25.5969,3.7894,95.2688,9.9033,92.2084,13.686,71.5314,6.6912,-5.9261,22.6438,77.4574,1,1,1
+Terrain-D,5,28.4408,3.2827,95.7539,16.5779,93.2702,11.7802,69.2862,3.9649,-2.6267,11.5636,71.9129,1,1,1

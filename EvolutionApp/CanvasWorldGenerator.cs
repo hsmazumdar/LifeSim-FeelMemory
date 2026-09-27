@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -477,6 +477,25 @@ namespace Evolution
             if (goal.Y >= size) goal = new Point(goal.X, 0);
 
             return new World(name, size, size, start, goal, roughness, new List<Rectangle>());
+        }
+
+
+        /// <summary>
+        ///  generate N procedural Terrain-01..Terrain-NN without deleting A–D.
+        /// Seeds are deterministic: baseSeed + 97*i. Start/goal use Fix2-like corner geometry cycling index.
+        /// </summary>
+        public static IReadOnlyList<World> GenerateProceduralTerrains(int count, int baseSeed = 9001)
+        {
+            if (count < 1) count = 1;
+            var list = new List<World>(count);
+            for (int i = 0; i < count; i++)
+            {
+                string name = string.Format("Terrain-{0:00}", i + 1);
+                int seed = unchecked(baseSeed + 97 * i);
+                // Reuse harder Terrain recipe; index cycles 0..3 for start/goal geometry variants.
+                list.Add(GenerateTerrain(name, seed, i % 4));
+            }
+            return list;
         }
 
         public static IReadOnlyList<World> GenerateFourTerrain()

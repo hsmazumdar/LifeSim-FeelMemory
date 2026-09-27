@@ -1,0 +1,5 @@
+﻿world,start_x,start_y,goal_x,goal_y,opt_energy,opt_steps,greedy_energy,greedy_steps,greedy_over_opt_pct
+Terrain-A,5,19,13,0,5.6267,21,10.3169,19,83.36
+Terrain-B,0,3,19,17,6.7033,19,7.1852,19,7.19
+Terrain-C,3,0,16,19,6.6059,21,9.0786,19,37.43
+Terrain-D,17,5,0,13,5.2675,18,9.742,17,84.94

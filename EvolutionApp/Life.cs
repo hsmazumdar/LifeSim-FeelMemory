@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -701,7 +701,7 @@ namespace Evolution
         private void btnSettings_Click(object sender, EventArgs e)
         {
             MessageBox.Show(this,
-                "LifeSim V16 - feel/motor STM + world-tagged feel-atlas LTM (V16 fixes).\n\n" +
+                "LifeSim - feel/motor STM + world-tagged feel-atlas LTM.\n\n" +
                 "Policy: " + BrainMemory.PolicyVersion + "\n\n" +
                 "Key V11 changes:\n" +
                 "Ã¢â‚¬Â¢ Brain leads terrain preference when UseBrain=true\n" +
@@ -711,7 +711,7 @@ namespace Evolution
                 "Ã¢â‚¬Â¢ Transfer evaluation: train A, test A+B+C+D\n\n" +
                 "Terrain: 0=smooth (fast), 1=rough (slow)\n" +
                 "Shared brain persists in memory-dat/brain.mem",
-                "LifeSim V16",
+                "LifeSim",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -939,7 +939,7 @@ namespace Evolution
             double sps = _world != null ? _robot.CurrentStepsPerSec(_world) : 0;
             lblCount.Text =
                 "t=" + count + "\n" +
-                "V16-feel-atlas\n" +
+                "feel-atlas\n" +
                 "pos=(" + _robot.Cell.X + "," + _robot.Cell.Y + ")\n" +
                 "energy=" + _robot.TotalEnergy.ToString("0.0") + "\n" +
                 "ltm=" + (_durableBrain != null ? _durableBrain.LtmCount.ToString() : "-") + "\n" +
