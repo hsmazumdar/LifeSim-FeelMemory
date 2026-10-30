@@ -272,6 +272,10 @@ namespace Evolution
         int _episodeStartStm;
         long _episodeStartTick;
         int _maxPathSteps;
+        // R1 Stage B: optional test-time progress bin from distance-to-goal (matches training backfill). Default off = legacy step-based.
+        public bool UseDistanceProgress;
+        public bool HasTestGoal;
+        public Point TestStart, TestGoal;
 
         /// <summary>Tour-local unique 10-tuple keys (filled at end-of-tour extract).</summary>
         readonly HashSet<string> _uniqueStmKeys = new HashSet<string>();
@@ -734,7 +738,7 @@ namespace Evolution
                 _pathOverflow = true;
                 StmDropCount++;
             }
-            byte pbin = ProgressBinFromStep(_tourStep, _maxPathSteps);
+            byte pbin = (UseDistanceProgress && HasTestGoal) ? ProgressBinFromDistance(new Point(cellX, cellY), TestStart, TestGoal) : ProgressBinFromStep(_tourStep, _maxPathSteps);
             var tr = new SenseMoveTrace
             {
                 Sense = sense != null ? (DirCellKind[])sense.Clone() : null,

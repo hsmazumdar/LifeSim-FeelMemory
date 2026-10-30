@@ -22,6 +22,8 @@ namespace Evolution
         public int[] Moves;    // relative move 0..7 per step
         public double[] Costs; // energy cost of the cell entered by each step
         public bool Reached;
+        public byte[] Gd;      // R1 Stage B: goal direction relative to facing at the source cell (same fn as SW backfill)
+        public byte[] Pb;      // R1 Stage B: progress bin from distance-to-goal (same fn as SW backfill)
     }
 
     public static class FeelUtil
@@ -30,12 +32,14 @@ namespace Evolution
         {
             if (att == null || att.Path == null || att.Path.Count == 0) return null;
             int n = att.Path.Count;
-            var t = new FeelTrajectory { Feels = new byte[n], Moves = new int[n], Costs = new double[n], Reached = att.ReachedGoal };
+            var t = new FeelTrajectory { Feels = new byte[n], Moves = new int[n], Costs = new double[n], Reached = att.ReachedGoal, Gd = new byte[n], Pb = new byte[n] };
             for (int i = 0; i < n; i++)
             {
                 var s = att.Path[i];
                 t.Feels[i] = (byte)TabularNgramBC.FeelAtSource(world, s.Cell);
                 t.Moves[i] = s.MoveDir;
+                t.Gd[i] = BrainMemory.ComputeGoalDirection(s.Cell, world.GoalCell, ((s.Facing % 8) + 8) % 8);
+                t.Pb[i] = BrainMemory.ProgressBinFromDistance(s.Cell, world.StartCell, world.GoalCell);
                 int abs = (((s.Facing + s.MoveDir) % 8) + 8) % 8;
                 var nc = new Point(s.Cell.X + BrainMemory.SenseDx[abs], s.Cell.Y + BrainMemory.SenseDy[abs]);
                 if (i + 1 < n) nc = att.Path[i + 1].Cell; // exact when available
@@ -295,6 +299,7 @@ namespace Evolution
             public EpisodicControlFeel Ec;
             public TabularQFeel Q;
             public int Successes, Failures;
+            public List<StageBRec> Recs = new List<StageBRec>(); // R1 Stage B: all teacher rollouts (for GC baselines + inner-fold tuning)
         }
 
         public static Bundle Train(IReadOnlyList<World> worlds, int attemptsPerWorld, int maxSteps, Random rng,
@@ -326,6 +331,7 @@ namespace Evolution
                         b.Failures++;
                         var ft = FeelUtil.FromAttempt(att, world);
                         b.Ec.Ingest(ft); b.Q.Ingest(ft); // failures only for value-based baselines
+                        if (ft != null) b.Recs.Add(new StageBRec { World = world, Traj = ft, Att = null });
                     }
                 }
             }
@@ -346,6 +352,7 @@ namespace Evolution
             b.Bc.IngestPath(att, world);
             var ft = FeelUtil.FromAttempt(att, world);
             b.Knn.Ingest(ft); b.Ec.Ingest(ft); b.Q.Ingest(ft);
+            if (ft != null) b.Recs.Add(new StageBRec { World = world, Traj = ft, Att = att });
             if (abl)
             {
                 IngestSw(b.SwNoBoost, att, world, false, false);

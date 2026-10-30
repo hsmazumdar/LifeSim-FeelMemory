@@ -54,6 +54,8 @@ namespace Evolution
         public bool HideDestination { get; set; } = false;
         /// <summary>R1 control: hide goal nearness/direction from LTM retrieval only (reactive goal bias unchanged).</summary>
         public bool MaskBrainGoalContext { get; set; } = false;
+        /// <summary>R1 Stage B: vote multiplier on the matched move for feel-policy baselines (paper value 4.0).</summary>
+        public double BcBoost { get; set; } = 4.0;
 
         /// <summary> tabular n-gram BC policy. When set, exact-key lookup steers; miss = EmptyLTM reactive.</summary>
         public TabularNgramBC TabularBC { get; set; }
@@ -395,6 +397,12 @@ namespace Evolution
                 FeelCode srcFeel = TabularNgramBC.FeelAtSource(world, Cell);
                 _bcFeelHist.Add((byte)srcFeel);
                 int support; string mkey;
+                var gcp = bcPolicy as IGoalCtxPolicy;
+                if (gcp != null)
+                {
+                    if (HideDestination) gcp.SetContext(-1, -1);
+                    else gcp.SetContext(BrainMemory.ComputeGoalDirection(Cell, world.GoalCell, Facing), BrainMemory.ProgressBinFromDistance(Cell, world.StartCell, world.GoalCell));
+                }
                 if (bcPolicy.TryLookup(_bcFeelHist, out bcRel, out support, out mkey) && bcRel >= 0 && bcRel <= 7)
                 {
                     bcHit = true;
@@ -435,7 +443,7 @@ namespace Evolution
                     // Hit: strong boost on matched relative move. Miss: EmptyLTM reactive (terrain).
                     if (bcHit)
                     {
-                        if (rel == bcRel) w *= 4.0;
+                        if (rel == bcRel) w *= BcBoost;
                         else w *= 0.35;
                         w *= (1.0 - 0.35 * roughness);
                         var knownBc = Motor.Get(nextCell);
