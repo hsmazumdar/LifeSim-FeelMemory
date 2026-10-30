@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Evolution
@@ -19,6 +19,7 @@ namespace Evolution
                         string.Equals(args[i], "--eval-gk-loo", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--gk-loo", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--eval-baseline", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(args[i], "--eval-revision", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--baseline", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "-eval", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(args[i], "--smoke", StringComparison.OrdinalIgnoreCase) ||
@@ -26,6 +27,7 @@ namespace Evolution
                     {
                         // Attach console so WinExe can print progress when launched from cmd.
                         try { AllocConsole(); } catch { }
+                        foreach (var ra in args) if (string.Equals(ra, "--eval-revision", StringComparison.OrdinalIgnoreCase)) return RevisionHarness.Run(args);
                         return EvalHarness.Run(args);
                     }
                 }

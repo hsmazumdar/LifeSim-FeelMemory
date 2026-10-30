@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -55,6 +55,8 @@ namespace Evolution
 
         /// <summary> tabular n-gram BC policy. When set, exact-key lookup steers; miss = EmptyLTM reactive.</summary>
         public TabularNgramBC TabularBC { get; set; }
+        /// <summary>R1: any IFeelPolicy (kNN / episodic control / tabular Q) through the same BC action wrapper. Null = unused.</summary>
+        public IFeelPolicy FeelPolicy { get; set; }
         public int BcHits { get; private set; }
         public int BcMisses { get; private set; }
         readonly List<byte> _bcFeelHist = new List<byte>(64);
@@ -382,7 +384,8 @@ namespace Evolution
             }
 
             // TabularNgramBC: push SOURCE-cell feel (same encoding as teacher) before lookup.
-            bool bcActive = TabularBC != null;
+            IFeelPolicy bcPolicy = TabularBC != null ? (IFeelPolicy)TabularBC : FeelPolicy;
+            bool bcActive = bcPolicy != null;
             int bcRel = -1;
             bool bcHit = false;
             if (bcActive)
@@ -390,7 +393,7 @@ namespace Evolution
                 FeelCode srcFeel = TabularNgramBC.FeelAtSource(world, Cell);
                 _bcFeelHist.Add((byte)srcFeel);
                 int support; string mkey;
-                if (TabularBC.TryLookup(_bcFeelHist, out bcRel, out support, out mkey) && bcRel >= 0 && bcRel <= 7)
+                if (bcPolicy.TryLookup(_bcFeelHist, out bcRel, out support, out mkey) && bcRel >= 0 && bcRel <= 7)
                 {
                     bcHit = true;
                     BcHits++;

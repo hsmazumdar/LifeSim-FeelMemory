@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Evolution
     /// At test: exact key lookup (prefer longest 5→3); miss → EmptyLTM reactive.
     /// Mechanism name in logs: TabularNgramBC
     /// </summary>
-    public sealed class TabularNgramBC
+    public sealed class TabularNgramBC : IFeelPolicy
     {
         public const string MechanismName = "TabularNgramBC";
         public const int MinNgram = 3;
@@ -24,6 +24,7 @@ namespace Evolution
         // key -> vote counts for relative moves 0..7
         readonly Dictionary<string, int[]> _votes = new Dictionary<string, int[]>();
         public int KeyCount { get { return _votes.Count; } }
+        public string Name { get { return MechanismName; } }
         public int TotalVotes { get; private set; }
         public int PathsIngested { get; private set; }
         public int StepsIngested { get; private set; }
