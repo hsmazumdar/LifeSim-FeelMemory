@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -403,6 +403,20 @@ namespace Evolution
             _nextAnalyzeAt = 150;
             _uniqueStmKeys.Clear();
             _uniqueStmUnits.Clear();
+        }
+
+        // ---- R1 audit / control helpers (revision-r1) ----
+        public int LtmCountForWorld(string id) { int n = 0; for (int i = 0; i < _ltm.Length; i++) if (_ltm[i].Used && string.Equals(_ltm[i].WorldId ?? "", id ?? "", StringComparison.OrdinalIgnoreCase)) n++; return n; }
+        public Dictionary<string, int> LtmWorldIds() { var d = new Dictionary<string, int>(); for (int i = 0; i < _ltm.Length; i++) if (_ltm[i].Used) { string k = _ltm[i].WorldId ?? ""; int c; d.TryGetValue(k, out c); d[k] = c + 1; } return d; }
+        public float LtmStrengthSum() { float s = 0; for (int i = 0; i < _ltm.Length; i++) if (_ltm[i].Used) s += _ltm[i].Strength; return s; }
+        /// <summary>Shuffled-action control: randomly permute stored MoveDir across used LTM units (keys untouched).</summary>
+        public int ShuffleLtmMoves(Random rng)
+        {
+            var idx = new List<int>(); for (int i = 0; i < _ltm.Length; i++) if (_ltm[i].Used) idx.Add(i);
+            var mv = new List<int>(); foreach (int i in idx) mv.Add(_ltm[i].MoveDir);
+            for (int i = mv.Count - 1; i > 0; i--) { int j = rng.Next(i + 1); int t = mv[i]; mv[i] = mv[j]; mv[j] = t; }
+            int changed = 0; for (int k = 0; k < idx.Count; k++) { if (_ltm[idx[k]].MoveDir != mv[k]) changed++; _ltm[idx[k]].MoveDir = mv[k]; }
+            return changed;
         }
 
         public BrainMemory CloneFrozenLtmOnly()

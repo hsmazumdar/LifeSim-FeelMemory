@@ -67,6 +67,7 @@
     <Compile Include="TabularNgramBC.cs" />
     <Compile Include="RevisionBaselines.cs" />
     <Compile Include="RevisionHarness.cs" />
+    <Compile Include="AuditR1.cs" />
     <Compile Include="CanvasWorldGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

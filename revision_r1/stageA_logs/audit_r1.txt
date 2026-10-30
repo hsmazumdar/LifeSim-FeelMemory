@@ -1,0 +1,37 @@
+PASS Terrain-A: held-out world not in training list
+PASS Terrain-A: LTM entries tagged with held-out WorldId BEFORE strip = 0
+  LTM world tags: Terrain-B=222,Terrain-D=65,Terrain-C=225
+PASS Terrain-A: no held-out WorldId among LTM tags
+PASS Terrain-A: STM empty at episode start (StmCount=0)
+PASS Terrain-A: LTM frozen during test (count 512->512, strength 3114.581->3114.581)
+PASS Terrain-A: next episode starts clean (STM=0, LTM unchanged)
+PASS Terrain-A: dest-hidden SW trajectory identical when goal is moved (735/735 steps match)
+  control: goal-known trajectories diverge at step 3 (expected early divergence)
+PASS Terrain-B: held-out world not in training list
+PASS Terrain-B: LTM entries tagged with held-out WorldId BEFORE strip = 0
+  LTM world tags: Terrain-A=449,Terrain-C=57,Terrain-D=6
+PASS Terrain-B: no held-out WorldId among LTM tags
+PASS Terrain-B: STM empty at episode start (StmCount=0)
+PASS Terrain-B: LTM frozen during test (count 512->512, strength 3111.748->3111.748)
+PASS Terrain-B: next episode starts clean (STM=0, LTM unchanged)
+PASS Terrain-B: dest-hidden SW trajectory identical when goal is moved (14/14 steps match)
+  control: goal-known trajectories diverge at step 1 (expected early divergence)
+PASS Terrain-C: held-out world not in training list
+PASS Terrain-C: LTM entries tagged with held-out WorldId BEFORE strip = 0
+  LTM world tags: Terrain-A=443,Terrain-B=63,Terrain-D=6
+PASS Terrain-C: no held-out WorldId among LTM tags
+PASS Terrain-C: STM empty at episode start (StmCount=0)
+PASS Terrain-C: LTM frozen during test (count 512->512, strength 3180.69->3180.69)
+PASS Terrain-C: next episode starts clean (STM=0, LTM unchanged)
+PASS Terrain-C: dest-hidden SW trajectory identical when goal is moved (826/826 steps match)
+  control: goal-known trajectories diverge at step 1 (expected early divergence)
+PASS Terrain-D: held-out world not in training list
+PASS Terrain-D: LTM entries tagged with held-out WorldId BEFORE strip = 0
+  LTM world tags: Terrain-A=443,Terrain-B=64,Terrain-C=5
+PASS Terrain-D: no held-out WorldId among LTM tags
+PASS Terrain-D: STM empty at episode start (StmCount=0)
+PASS Terrain-D: LTM frozen during test (count 512->512, strength 3190.236->3190.236)
+PASS Terrain-D: next episode starts clean (STM=0, LTM unchanged)
+PASS Terrain-D: dest-hidden SW trajectory identical when goal is moved (17/17 steps match)
+  control: goal-known trajectories diverge at step 3 (expected early divergence)
+ALL CHECKS PASSED

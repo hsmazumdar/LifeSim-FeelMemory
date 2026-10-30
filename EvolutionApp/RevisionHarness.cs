@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -17,7 +17,7 @@ namespace Evolution
     /// </summary>
     public static class RevisionHarness
     {
-        static readonly string[] AllPolicies = { "SuccessWeighted", "TabularNgramBC", "KnnFeel", "EpisodicControl", "TabularQ", "EmptyLTM", "SW_NoSuccessWeight", "SW_DestAnchor" };
+        static readonly string[] AllPolicies = { "SuccessWeighted", "TabularNgramBC", "KnnFeel", "EpisodicControl", "TabularQ", "EmptyLTM", "SW_NoSuccessWeight", "SW_DestAnchor", "SW_ShuffledActions", "SW_NoGoalCtx" };
 
         static string Arg(string[] args, string name, string def)
         {
@@ -74,6 +74,7 @@ namespace Evolution
                     b.Sw.StripWorldShard(held.Name);
                     if (b.SwNoBoost != null) b.SwNoBoost.StripWorldShard(held.Name);
                     if (b.SwDestAnchor != null) b.SwDestAnchor.StripWorldShard(held.Name);
+                    if (policies.Contains("SW_ShuffledActions")) { b.SwShuffled = b.Sw.CloneFrozenLtmOnly(); b.SwShuffled.ShuffleLtmMoves(new Random(seed * 31 + 7)); }
                     double trainSec = sw.Elapsed.TotalSeconds;
                     int pairedBase = seed + 777;
                     var sb = new StringBuilder();
@@ -118,6 +119,8 @@ namespace Evolution
                     case "KnnFeel": robot.FeelPolicy = b.Knn; keys = b.Knn.KeyCount; break;
                     case "EpisodicControl": robot.FeelPolicy = b.Ec; keys = b.Ec.KeyCount; break;
                     case "TabularQ": robot.FeelPolicy = b.Q; keys = b.Q.KeyCount; break;
+                    case "SW_ShuffledActions": brain = b.SwShuffled; break;
+                    case "SW_NoGoalCtx": brain = b.Sw; robot.MaskBrainGoalContext = true; break;
                     case "EmptyLTM": break;
                     default: throw new ArgumentException("unknown policy " + policy);
                 }

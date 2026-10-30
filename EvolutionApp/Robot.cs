@@ -52,6 +52,8 @@ namespace Evolution
 
         /// <summary>V13 dest-hidden arm: no goal-coordinate bias / FaceToward(goal). Arrival detection still works.</summary>
         public bool HideDestination { get; set; } = false;
+        /// <summary>R1 control: hide goal nearness/direction from LTM retrieval only (reactive goal bias unchanged).</summary>
+        public bool MaskBrainGoalContext { get; set; } = false;
 
         /// <summary> tabular n-gram BC policy. When set, exact-key lookup steers; miss = EmptyLTM reactive.</summary>
         public TabularNgramBC TabularBC { get; set; }
@@ -457,8 +459,8 @@ namespace Evolution
                 {
                     // Confidence-gated blend: unmatched LTM must not strip terrain bias (transfer poison).
                     double conf;
-                    int gNear = HideDestination ? -1 : CurrentGoalNearness(world);
-                    int gDir = HideDestination ? -1 : CurrentGoalDirection(world);
+                    int gNear = (HideDestination || MaskBrainGoalContext) ? -1 : CurrentGoalNearness(world);
+                    int gDir = (HideDestination || MaskBrainGoalContext) ? -1 : CurrentGoalDirection(world);
                     double brainW = Brain.DirectionWeight(sense, i, Facing, gNear, gDir, out conf);
                     if (conf < 0.05)
                     {

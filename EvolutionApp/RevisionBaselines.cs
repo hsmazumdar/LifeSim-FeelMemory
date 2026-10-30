@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -289,6 +289,7 @@ namespace Evolution
             public BrainMemory Sw;          // paper method
             public BrainMemory SwNoBoost;   // ablation: success-weight boost fixed to 1.0
             public BrainMemory SwDestAnchor;// ablation: feels anchored at destination cell
+            public BrainMemory SwShuffled;  // control: SW keys with permuted motor actions
             public TabularNgramBC Bc;
             public KnnFeelMemory Knn;
             public EpisodicControlFeel Ec;
