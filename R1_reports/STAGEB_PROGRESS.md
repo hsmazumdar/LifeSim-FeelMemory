@@ -27,3 +27,5 @@
 - 16:07 IST: (a) docx paper lists updated (ASOC + LifeSim row + 30 Oct line). Commits 6d06831, e1fe57c.
 - 16:07 IST: (c) 04_Paper_Fix_List.md written. Sens jobs at cap=256.
 - 16:38 IST: (b) sensitivity sweeps done (12/12); 03_Sensitivity_Report.md written. All tasks done; laptop idle.
+
+- 18:13 IST: POSITIVE-GAIN experiments. Lid action set to 0 (saved: power_lid_before_posgain.txt; restore lid=1 AC/DC). Code: Robot.cs hybrid+goal-noise hooks, GoalCondBaselines IConfPolicy, PosGainHarness.cs (--eval-posgain), built to bin\PosGain (Release untouched). Backup of pre-change source: backup_posgain_pre\. Pilot launched (A-D x 101/202/303): run_posgain.ps1 -Tag pilot -SeedGroups '101;202;303' -MaxPar 12 -Only Terrain-A,Terrain-B,Terrain-C,Terrain-D (re-run same command to resume; finished chunks skipped).

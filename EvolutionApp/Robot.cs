@@ -61,6 +61,14 @@ namespace Evolution
         public TabularNgramBC TabularBC { get; set; }
         /// <summary>R1: any IFeelPolicy (kNN / episodic control / tabular Q) through the same BC action wrapper. Null = unused.</summary>
         public IFeelPolicy FeelPolicy { get; set; }
+        /// <summary>R1 pos-gain: hybrid = primary FeelPolicy, SW brain branch when primary misses or conf below HybridTau.</summary>
+        public bool HybridBrain { get; set; } = false;
+        public double HybridTau { get; set; } = 0.0;
+        public int HybridBrainSteps;
+        /// <summary>R1 pos-gain robustness: corrupt goal-direction signal given to memories (not the shared heuristic).</summary>
+        public double GoalNoiseP { get; set; } = 0.0;
+        public double GoalDropP { get; set; } = 0.0;
+        public Random NoiseRng;
         public int BcHits { get; private set; }
         public int BcMisses { get; private set; }
         readonly List<byte> _bcFeelHist = new List<byte>(64);
@@ -388,6 +396,16 @@ namespace Evolution
             }
 
             // TabularNgramBC: push SOURCE-cell feel (same encoding as teacher) before lookup.
+            int ctxDir = -1; bool ctxDrop = false;
+            if (!HideDestination)
+            {
+                ctxDir = BrainMemory.ComputeGoalDirection(Cell, world.GoalCell, Facing);
+                if (NoiseRng != null)
+                {
+                    if (GoalDropP > 0 && NoiseRng.NextDouble() < GoalDropP) ctxDrop = true;
+                    else if (GoalNoiseP > 0 && NoiseRng.NextDouble() < GoalNoiseP) ctxDir = NoiseRng.Next(8);
+                }
+            }
             IFeelPolicy bcPolicy = TabularBC != null ? (IFeelPolicy)TabularBC : FeelPolicy;
             bool bcActive = bcPolicy != null;
             int bcRel = -1;
@@ -401,7 +419,8 @@ namespace Evolution
                 if (gcp != null)
                 {
                     if (HideDestination) gcp.SetContext(-1, -1);
-                    else gcp.SetContext(BrainMemory.ComputeGoalDirection(Cell, world.GoalCell, Facing), BrainMemory.ProgressBinFromDistance(Cell, world.StartCell, world.GoalCell));
+                    else if (ctxDrop) gcp.SetContext(-1, -1);
+                    else gcp.SetContext(ctxDir, BrainMemory.ProgressBinFromDistance(Cell, world.StartCell, world.GoalCell));
                 }
                 if (bcPolicy.TryLookup(_bcFeelHist, out bcRel, out support, out mkey) && bcRel >= 0 && bcRel <= 7)
                 {
@@ -414,6 +433,10 @@ namespace Evolution
                 }
             }
 
+            double bcConf = 1.0; var confP = bcPolicy as IConfPolicy;
+            if (bcHit && confP != null) bcConf = confP.LastConf;
+            bool hybHere = bcActive && HybridBrain && UseBrain && sense != null && (!bcHit || bcConf < HybridTau);
+            if (hybHere) HybridBrainSteps++;
             double[] weights = new double[8];
             double sum = 0;
             int legal = 0;
@@ -438,7 +461,7 @@ namespace Evolution
                 var nextCell = new Point(nx, ny);
                 float roughness = world.CellRoughness(nextCell);
 
-                if (bcActive)
+                if (bcActive && !hybHere)
                 {
                     // Hit: strong boost on matched relative move. Miss: EmptyLTM reactive (terrain).
                     if (bcHit)
@@ -467,8 +490,8 @@ namespace Evolution
                 {
                     // Confidence-gated blend: unmatched LTM must not strip terrain bias (transfer poison).
                     double conf;
-                    int gNear = (HideDestination || MaskBrainGoalContext) ? -1 : CurrentGoalNearness(world);
-                    int gDir = (HideDestination || MaskBrainGoalContext) ? -1 : CurrentGoalDirection(world);
+                    int gNear = (HideDestination || MaskBrainGoalContext || ctxDrop) ? -1 : CurrentGoalNearness(world);
+                    int gDir = (HideDestination || MaskBrainGoalContext || ctxDrop) ? -1 : (NoiseRng != null ? ctxDir : CurrentGoalDirection(world));
                     double brainW = Brain.DirectionWeight(sense, i, Facing, gNear, gDir, out conf);
                     if (conf < 0.05)
                     {

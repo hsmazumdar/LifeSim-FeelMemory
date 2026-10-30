@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +6,8 @@ namespace Evolution
 {
     /// <summary>R1 Stage B: policies that also receive the goal context SW retrieval uses (goal direction relative to facing, progress bin).</summary>
     public interface IGoalCtxPolicy { void SetContext(int goalDir, int progBin); }
+    /// <summary>R1 pos-gain: vote share of the chosen action on a goal-conditioned hit (0 when the GC part missed).</summary>
+    public interface IConfPolicy { double LastConf { get; } }
 
     public sealed class StageBRec
     {
@@ -24,8 +26,9 @@ namespace Evolution
 
     /// <summary>Goal-conditioned tabular n-gram BC: key = feel n-gram (L=5..3, longest first) + goal dir + progress bin.
     /// Context miss or unknown context (DH) -> feel-only TabularNgramBC fallback.</summary>
-    public sealed class GcTabularBC : IFeelPolicy, IGoalCtxPolicy
+    public sealed class GcTabularBC : IFeelPolicy, IGoalCtxPolicy, IConfPolicy
     {
+        public double LastConf { get; private set; }
         public const string MechanismName = "TabularNgramBC_GC";
         public IFeelPolicy Fallback;
         readonly Dictionary<string, int[]> _v = new Dictionary<string, int[]>();
@@ -50,7 +53,7 @@ namespace Evolution
         }
         public bool TryLookup(IList<byte> h, out int rel, out int support, out string mk)
         {
-            rel = -1; support = 0; mk = null;
+            rel = -1; support = 0; mk = null; LastConf = 0;
             if (_gd >= 0 && h != null)
             {
                 for (int len = Math.Min(TabularNgramBC.MaxNgram, h.Count); len >= TabularNgramBC.MinNgram; len--)
@@ -61,7 +64,7 @@ namespace Evolution
                     if (_v.TryGetValue(k, out r))
                     {
                         int best = 0; for (int a = 1; a < 8; a++) if (r[a] > r[best]) best = a;
-                        if (r[best] > 0) { rel = best; support = r[best]; mk = k; return true; }
+                        if (r[best] > 0) { int tot = 0; for (int a = 0; a < 8; a++) tot += r[a]; LastConf = (double)r[best] / tot; rel = best; support = r[best]; mk = k; return true; }
                     }
                 }
             }
@@ -72,8 +75,9 @@ namespace Evolution
 
     /// <summary>Goal-conditioned kNN: items = (feel window L, goal dir, progress bin); distance = Hamming + Wg*circDirDist + Wp*|dProg|
     /// (Hamming still capped at MaxHamming). Unknown context -> feel-only kNN fallback.</summary>
-    public sealed class GcKnn : IFeelPolicy, IGoalCtxPolicy
+    public sealed class GcKnn : IFeelPolicy, IGoalCtxPolicy, IConfPolicy
     {
+        public double LastConf { get; private set; }
         public const string MechanismName = "KnnFeel_GC";
         public int L = 5, K = 5, MaxHamming = 2;
         public double Wg = 0.5, Wp = 0.25;
@@ -106,7 +110,7 @@ namespace Evolution
         }
         public bool TryLookup(IList<byte> h, out int rel, out int support, out string mk)
         {
-            rel = -1; support = 0; mk = null;
+            rel = -1; support = 0; mk = null; LastConf = 0;
             var q = _gd >= 0 ? FeelUtil.Tail(h, L) : null;
             if (q != null && _keys.Count > 0)
             {
@@ -131,7 +135,7 @@ namespace Evolution
                         support++;
                     }
                     int best = 0; for (int a = 1; a < 8; a++) if (score[a] > score[best]) best = a;
-                    if (score[best] > 0) { rel = best; mk = "gknn"; return true; }
+                    if (score[best] > 0) { double tot = 0; for (int a = 0; a < 8; a++) tot += score[a]; LastConf = score[best] / tot; rel = best; mk = "gknn"; return true; }
                 }
             }
             return Fallback != null && Fallback.TryLookup(h, out rel, out support, out mk);
