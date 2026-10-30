@@ -29,3 +29,5 @@
 - 16:38 IST: (b) sensitivity sweeps done (12/12); 03_Sensitivity_Report.md written. All tasks done; laptop idle.
 
 - 18:13 IST: POSITIVE-GAIN experiments. Lid action set to 0 (saved: power_lid_before_posgain.txt; restore lid=1 AC/DC). Code: Robot.cs hybrid+goal-noise hooks, GoalCondBaselines IConfPolicy, PosGainHarness.cs (--eval-posgain), built to bin\PosGain (Release untouched). Backup of pre-change source: backup_posgain_pre\. Pilot launched (A-D x 101/202/303): run_posgain.ps1 -Tag pilot -SeedGroups '101;202;303' -MaxPar 12 -Only Terrain-A,Terrain-B,Terrain-C,Terrain-D (re-run same command to resume; finished chunks skipped).
+
+- 2026-10-30 18:32 IST pos-gain pilot done (A-D x 101/202/303, 13.5 min). Promising: Hyb_BC_GC (+1.0..+5.3pp vs BC_GC, 4/4 in base/k2/k5/k10/shift/noise25), HybDH_kNN (+1.7pp). SW < GC baselines everywhere (-9..-31pp). Hybrid hurts under goal drop. Launching full grid: run_posgain.ps1 -Tag full (10 seeds x 20 worlds).
