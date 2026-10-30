@@ -288,6 +288,8 @@ namespace Evolution
     /// </summary>
     public static class RevisionTrainer
     {
+        /// <summary>R1 sensitivity: LTM capacity for trained SW brains (paper value 512).</summary>
+        public static int LtmCap = BrainMemory.DefaultLtmCapacity;
         public sealed class Bundle
         {
             public BrainMemory Sw;          // paper method
@@ -307,14 +309,14 @@ namespace Evolution
         {
             var b = new Bundle
             {
-                Sw = new BrainMemory(), Bc = new TabularNgramBC(),
+                Sw = new BrainMemory(BrainMemory.DefaultStmCapacity, LtmCap), Bc = new TabularNgramBC(),
                 Knn = new KnnFeelMemory { L = ngramL }, Ec = new EpisodicControlFeel { L = ngramL }, Q = new TabularQFeel { L = ngramL }
             };
             b.Sw.ClearPreferredVotes(); b.Bc.Clear();
             if (doAblations)
             {
-                b.SwNoBoost = new BrainMemory(); b.SwNoBoost.ClearPreferredVotes();
-                b.SwDestAnchor = new BrainMemory(); b.SwDestAnchor.ClearPreferredVotes();
+                b.SwNoBoost = new BrainMemory(BrainMemory.DefaultStmCapacity, LtmCap); b.SwNoBoost.ClearPreferredVotes();
+                b.SwDestAnchor = new BrainMemory(BrainMemory.DefaultStmCapacity, LtmCap); b.SwDestAnchor.ClearPreferredVotes();
             }
             foreach (var world in worlds)
             {

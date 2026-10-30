@@ -70,6 +70,7 @@
     <Compile Include="AuditR1.cs" />
     <Compile Include="GoalCondBaselines.cs" />
     <Compile Include="StageBHarness.cs" />
+    <Compile Include="SensHarness.cs" />
     <Compile Include="CanvasWorldGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

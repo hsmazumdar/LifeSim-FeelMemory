@@ -253,6 +253,8 @@ namespace Evolution
         public const int MemFormatVersion = 2;
         public const int DefaultStmCapacity = 1000;
         public const int DefaultLtmCapacity = 512;
+        /// <summary>R1 sensitivity: goal-direction weight in LTM match score (paper value 2.5).</summary>
+        public static double GoalDirWeight = 2.5;
         public const int DefaultCapacity = DefaultLtmCapacity;
         public int Capacity { get { return LtmCapacity; } }
         public const int MaxHamming = 2;
@@ -1488,7 +1490,7 @@ namespace Evolution
                     progAgree = 1.0 - 0.12 * pd;
 
                     // Direction weighted higher than progress/nearness when present
-                    double situ = (2.5 * dirAgree + 1.0 * progAgree) / 3.5;
+                    double situ = (GoalDirWeight * dirAgree + 1.0 * progAgree) / (GoalDirWeight + 1.0);
                     if (pass == 1) situ *= 0.55; // weaker cross-shard
                     situ *= (1.0 - 0.22 * bestHam); // soft penalty for Hamming distance
                     double score = situ * Math.Min(4.0, rule.Strength);

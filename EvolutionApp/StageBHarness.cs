@@ -19,7 +19,7 @@ namespace Evolution
     /// </summary>
     public static class StageBHarness
     {
-        sealed class Cfg
+        internal sealed class Cfg
         {
             public double Boost = 4.0; public int K = 5; public double Wg = 0.5;
             public override string ToString() { return string.Format(CultureInfo.InvariantCulture, "boost={0};K={1};Wg={2}", Boost, K, Wg); }
@@ -74,7 +74,7 @@ namespace Evolution
             throw new ArgumentException(arm);
         }
 
-        static int SetupArm(Robot robot, StageBSet s, string arm, Cfg c)
+        internal static int SetupArm(Robot robot, StageBSet s, string arm, Cfg c)
         {
             var p = Arm(s, arm, c);
             if (p is TabularNgramBC) robot.TabularBC = (TabularNgramBC)p; else robot.FeelPolicy = p;
@@ -82,7 +82,7 @@ namespace Evolution
             return p.KeyCount;
         }
 
-        static int SetupBrain(Robot robot, BrainMemory brain, World world, bool hide, bool distProg, bool maskGoal)
+        internal static int SetupBrain(Robot robot, BrainMemory brain, World world, bool hide, bool distProg, bool maskGoal)
         {
             var clone = brain.CloneFrozenLtmOnly();
             if (distProg)
@@ -94,7 +94,7 @@ namespace Evolution
             return brain.LtmCount;
         }
 
-        static EvalRunTotals Eval(World world, Func<Robot, int> setup, int runs, int maxSteps, int pairedBaseSeed, bool hide, out int keys)
+        internal static EvalRunTotals Eval(World world, Func<Robot, int> setup, int runs, int maxSteps, int pairedBaseSeed, bool hide, out int keys)
         {
             keys = 0;
             var totals = new EvalRunTotals { Runs = runs, Label = world.Name };

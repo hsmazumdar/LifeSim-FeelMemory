@@ -18,6 +18,8 @@ namespace Evolution
     {
         public static int CircDir(int a, int b) { int d = Math.Abs(a - b) % 8; return d > 4 ? 8 - d : d; }
         public static string Ctx(int gd, int pb) { return "|g" + gd + "p" + pb; }
+        /// <summary>R1 capacity sweep: max stored keys for GC BC / kNN / EC (first-come; default unlimited).</summary>
+        public static int MaxKeys = int.MaxValue;
     }
 
     /// <summary>Goal-conditioned tabular n-gram BC: key = feel n-gram (L=5..3, longest first) + goal dir + progress bin.
@@ -41,7 +43,7 @@ namespace Evolution
                 {
                     if (e - len + 1 < 0) break;
                     string k = FeelUtil.Key(t.Feels, e, len) + GoalCtxUtil.Ctx(t.Gd[e], t.Pb[e]);
-                    int[] r; if (!_v.TryGetValue(k, out r)) { r = new int[8]; _v[k] = r; }
+                    int[] r; if (!_v.TryGetValue(k, out r)) { if (_v.Count >= GoalCtxUtil.MaxKeys) continue; r = new int[8]; _v[k] = r; }
                     r[mv]++;
                 }
             }
@@ -94,6 +96,7 @@ namespace Evolution
                 int idx;
                 if (!_index.TryGetValue(key, out idx))
                 {
+                    if (_keys.Count >= GoalCtxUtil.MaxKeys) continue;
                     idx = _keys.Count; _index[key] = idx;
                     var w = new byte[L]; Array.Copy(t.Feels, e - L + 1, w, 0, L);
                     _keys.Add(w); _g.Add(t.Gd[e]); _p.Add(t.Pb[e]); _votes.Add(new int[8]);
@@ -166,6 +169,7 @@ namespace Evolution
                 int idx;
                 if (!_index.TryGetValue(key, out idx))
                 {
+                    if (_keys.Count >= GoalCtxUtil.MaxKeys) continue;
                     idx = _keys.Count; _index[key] = idx;
                     var w = new byte[L]; Array.Copy(t.Feels, e - L + 1, w, 0, L);
                     _keys.Add(w); _g.Add(t.Gd[e]); _p.Add(t.Pb[e]);
