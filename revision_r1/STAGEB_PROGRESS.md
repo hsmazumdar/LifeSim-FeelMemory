@@ -24,3 +24,5 @@
 - 15:57 IST: stageB full 136/140. Sensitivity sweep (item b) code added (SensHarness.cs, GoalDirWeight, LtmCap, GC MaxKeys), built to bin\Sens\ (Release exe untouched), 12 jobs launched -> EvalLogs\sens\.
 - 16:05 IST: stageB full 140/140
 - 16:06 IST: Stage B 140/140 done; stats_all10.md + 02_StageB_Report.md written.
+- 16:07 IST: (a) docx paper lists updated (ASOC + LifeSim row + 30 Oct line). Commits 6d06831, e1fe57c.
+- 16:07 IST: (c) 04_Paper_Fix_List.md written. Sens jobs at cap=256.
