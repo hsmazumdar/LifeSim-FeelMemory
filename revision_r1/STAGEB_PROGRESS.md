@@ -26,3 +26,4 @@
 - 16:06 IST: Stage B 140/140 done; stats_all10.md + 02_StageB_Report.md written.
 - 16:07 IST: (a) docx paper lists updated (ASOC + LifeSim row + 30 Oct line). Commits 6d06831, e1fe57c.
 - 16:07 IST: (c) 04_Paper_Fix_List.md written. Sens jobs at cap=256.
+- 16:38 IST: (b) sensitivity sweeps done (12/12); 03_Sensitivity_Report.md written. All tasks done; laptop idle.
