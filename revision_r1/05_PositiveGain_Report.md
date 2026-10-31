@@ -1,7 +1,9 @@
-﻿# Positive-Gain Report - LifeSim ([redacted]) revision
+# Positive-Gain Report - LifeSim
+
+> Correction: k is the number of training worlds (random subset of the LOO training worlds; see PosGainHarness.cs), not teacher paths.
 Generated 2026-10-30 23:25 IST. Data: full grid, 10 seeds (101..1010) x 20 LOO worlds = 200 chunks, all finished (runner done 21:52 IST), 15400 raw rows. Full stats: EvalLogs\posgain\full\stats_full.md (copy in code\revision_r1\posgain_full\). Pilot (A-D x 3 seeds) is excluded.
 
-Protocol as in Stage B (report 02). Gain = 100*(Empty-P)/Empty energy, relative to EmptyLTM under the same condition. Per-world mean over seeds; paired exact Wilcoxon (two-sided) over the 20 worlds; Holm over the pre-specified family of 38 comparisons; bootstrap 95% CI (10000, worlds resampled). Experiments: E1 hybrid at full data (base) and with the destination hidden (dh); E2 low data (k = 2/5/10 teacher paths); E3 robustness (goal-signal noise 25/50%, goal-signal drop 25/50%, generator shift).
+Protocol as in Stage B (report 02). Gain = 100*(Empty-P)/Empty energy, relative to EmptyLTM under the same condition. Per-world mean over seeds; paired exact Wilcoxon (two-sided) over the 20 worlds; Holm over the pre-specified family of 38 comparisons; bootstrap 95% CI (10000, worlds resampled). Experiments: E1 hybrid at full data (base) and with the destination hidden (dh); E2 low data (k = 2/5/10 training worlds); E3 robustness (goal-signal noise 25/50%, goal-signal drop 25/50%, generator shift).
 
 Hybrid = goal-conditioned (GC) baseline that hands a decision step to the SW feel memory when its own match is weak (tau = confidence threshold, miss = no match). "pp" = percentage points of gain.
 
@@ -38,4 +40,4 @@ Hybrid = goal-conditioned (GC) baseline that hands a decision step to the SW fee
 | dh (feel-only) | 16.6 | | 63.2 (BC) | 63.3 (kNN) | | | 63.2 (HybDH_BC) | 63.6 (HybDH_kNN) |
 
 ## Bottom line for the paper
-The only positive result that survives is narrow: used as a fallback when a goal-conditioned tabular BC has no confident match, the SW feel memory gives a small but consistent gain (about +1 pp, up to +3.6 pp with 2 teacher paths), on all 20 held-out worlds. It does not help kNN, does not help without the destination, and hurts when the goal signal drops out. This supports the paper's analysis framing (goal conditioning does the work) and should be reported as a modest, complementary-fallback effect, not as a rescue of SW.
+The only positive result that survives is narrow: used as a fallback when a goal-conditioned tabular BC has no confident match, the SW feel memory gives a small but consistent gain (about +1 pp, up to +3.6 pp with 2 training worlds), on all 20 held-out worlds. It does not help kNN, does not help without the destination, and hurts when the goal signal drops out. This supports the paper's analysis framing (goal conditioning does the work) and should be reported as a modest, complementary-fallback effect, not as a rescue of SW.

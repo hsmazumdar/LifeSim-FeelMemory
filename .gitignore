@@ -42,4 +42,8 @@ Paper/
 *.bak_*
 *.docx.bak*
 _tmp_*
-_v7_head.txt
+## Never publish papers
+*.docx
+*.pdf
+Paper/
+*.tex

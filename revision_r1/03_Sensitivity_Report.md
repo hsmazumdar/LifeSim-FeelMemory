@@ -1,4 +1,4 @@
-﻿# 03 Sensitivity Report — LifeSim Stage B (GK mode)
+# 03 Sensitivity Report — LifeSim Stage B (GK mode)
 Generated 2026-10-30 16:38 IST. Worlds: Terrain-A..D held out (LOO over 20), seeds 101/202/303, so 12 runs per cell. Raw data: EvalLogs\sens\*\sens_raw.csv; summary script: sens_summary.py.
 Gain = 100*(EmptyLTM - P)/EmptyLTM energy, averaged per world and then across the 4 worlds. Capped GC baselines keep the first N keys and use fixed configs (BC boost 8; kNN boost 8, K 3, Wg 1). SW cap sweep uses dirw = 2.5; dirw sweep uses cap = 512.
 

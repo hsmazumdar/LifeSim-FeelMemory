@@ -2,9 +2,9 @@
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 
-title LifeSim - reader launcher
+title LifeSim - run menu
 echo.
-echo  LifeSim reader launcher
+echo  LifeSim run menu
 echo  Repo: %CD%
 echo.
 

@@ -17,7 +17,7 @@ Wall clock: 645.7 min
 ## NOTES
 - Mechanism names in logs: SuccessWeighted, TabularNgramBC, EmptyLTM.
 - No PPO/DQN. Simple learned baseline only.
-- Reader artifact: LifeSim.exe --eval-baseline.
+- Reproduce: LifeSim.exe --eval-baseline.
 
 ### Optimal reference
 ```

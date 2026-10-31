@@ -1,6 +1,6 @@
 # LifeSim R1, Stage A audit report
 
-Paper: [redacted] (Kanak Patel), "LifeSim feel-sequence memory"
+Method audited: success-weighted (SW) feel-sequence memory in LifeSim.
 Date: 30 Oct 2026 (IST). Machine: office PC, SSD at K:. Branch: revision-r1, based on 5139829.
 Build: msbuild Release, `code\EvolutionApp\bin\Release\LifeSim.exe`. Run logs are in `Revision_R1\EvalLogs\stageA\`.
 
@@ -13,7 +13,7 @@ Build: msbuild Release, `code\EvolutionApp\bin\Release\LifeSim.exe`. Run logs ar
 | 3 | Baseline fairness | **Not fair as currently described.** SW gets goal direction, Hamming-loose matching and its own blend. Baselines get feel-only exact or kNN keys plus a fixed x4 vote. |
 | 4 | Shuffled-action control | **Mostly collapses:** 71.5 → 15.3 % (EmptyLTM = 0) |
 | 5 | Energy accounting and success rates | Formula confirmed. Goal rates are near 1.0 for all methods. The fail-penalty definition is odd (see below). |
-| 6 | Paper defects | **Mostly not present in the submitted docx.** Table 4 is complete but split across a page in the proof. Back-matter headings are misplaced in the proof. No "10^4" found. 251 vs 250 is consistent (250 noisy attempts + 1 Dijkstra path). |
+| 6 | Reporting checks | **Mostly not present in the submitted docx.** Table 4 is complete but split across a page in the proof. Back-matter headings are misplaced in the proof. No "10^4" found. 251 vs 250 is consistent (250 noisy attempts + 1 Dijkstra path). |
 
 ## 1. Reproduction
 
@@ -109,7 +109,7 @@ Verdict: performance largely collapses, so the stored actions matter. The residu
   - Empty 0.74–0.98
 - The gains are pure path efficiency, not goal reaching. Report the goal rates in the paper.
 
-## 6. Paper defects
+## 6. Reporting checks (earlier draft)
 
 Checked in the submitted docx (`LifeSim_Paper_SUBMIT.docx`, 15 tables) and in the proof PDF:
 - **Table 4:** full in the docx (A–D rows: 75.2, 80.8, 71.5, 69.3). In the proof the header sits at the bottom of page 8 and the rows are on page 9. It *looks* empty: this is a layout defect, not missing data.

@@ -1,18 +1,14 @@
-FROZEN SNAPSHOT - LifeSim (publication artifact)
+FROZEN SNAPSHOT - LifeSim-FeelMemory
+Paper: "What Drives Generalization in Feel-Sequence Memory? Goal Conditioning, Not Success Weighting, on Procedural Terrain" (under submission)
+Snapshot date: 2026-10-31 (Asia/Calcutta)
 
-Method: success-weighted unique path-unit promotion of source-cell feel n-grams
-(SuccessWeighted), compared against a tabular n-gram behavior-cloning baseline
-(TabularNgramBC) and EmptyLTM reactive control.
+Contents: LifeSim source (EvolutionApp/), evaluation harnesses
+(--eval, --eval-baseline, --audit-r1, --eval-revision, --eval-stageb,
+--eval-sens, --eval-posgain), per-world logs, statistics and reports
+(revision_r1/, EvalLogs/paper_results/).
 
-Protocol: Fix2 honesty (ClearStm / CloneFrozenLtmOnly); leave-one-out goal-known
-on Terrain-A..D and expanded procedural suites.
+Protocol: leave-one-out over 20 worlds (Terrain-A..D + 16 procedural, base
+seed 9001), 10 seeds (101..1010), STM cleared per episode, LTM frozen at test;
+paired exact Wilcoxon over worlds, Holm correction, bootstrap 95% CI.
 
-Canonical baseline packs:
-  EvalLogs/paper_results/baseline_phaseA/     (n=5, A-D)
-  EvalLogs/paper_results/baseline_phaseB/     (n=25, A-D)
-  EvalLogs/paper_results/baseline_phaseC_n25/ (n=25, 20 worlds; paper headline)
-
-EmptyLTM / dest-hidden locked SW tables remain under EvalLogs/paper_results/.
-Paper PDF/DOCX is NOT in this repository; available from the corresponding
-author upon request or after acceptance. Result figures may remain under paper_figures/.
-Do not treat sibling lab folders as alternate releases of this repository.
+Note: in the low-data fallback experiment, k = number of training worlds.

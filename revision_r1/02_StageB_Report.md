@@ -1,4 +1,4 @@
-﻿# Stage B Report — LifeSim ([redacted]) revision
+# Stage B Report — LifeSim
 Generated 2026-10-30 16:06 IST. Data: pilot (seeds 101/202/303) + full (404..1010) = 10 seeds x 20 LOO worlds, 5800 rows. Full stats: EvalLogs\stageB\all10\stats_all10.md. Smoke and repro_A404 runs are excluded.
 
 Protocol: LOO over 20 worlds (A-D plus 16 procedural ones); 250 noisy teacher attempts + 1 Dijkstra path; 30 eval runs; 2000 max steps. Gain = 100*(Empty-P)/Empty energy. Tuning was done on 3 inner training worlds only. The +/- is the SD across the per-world means.

@@ -1,4 +1,4 @@
-﻿# Stage B progress (2026-10-30 10:16 IST)
+# Stage B progress (2026-10-30 10:16 IST)
 - Code committed locally as WIP: ccdf0da (branch revision-r1). Not pushed. docx deletions left unstaged.
 - Pilot (seeds 101,202,303 x 20 worlds): runner.ps1 PID 23812 alive; 14 worlds running (2/3 jobs done each at 10:15), 6 worlds (Terrain-11..16) queued.
 - Under 14-way contention one job (1 world x 1 seed) takes ~20-25 min, so 3-seed chunks are ~70 min (> 40 min target). Full grid plan: reuse pilot seeds, run seeds 404..1010 as 1-seed chunks (~20-25 min each): run_stageB.ps1 -Tag full -SeedGroups 404,505,... -MaxPar 14. Runner skips finished chunks, so re-launching resumes.
@@ -25,5 +25,5 @@
 - 16:05 IST: stageB full 140/140
 - 16:06 IST: Stage B 140/140 done; stats_all10.md + 02_StageB_Report.md written.
 - 16:07 IST: (a) docx paper lists updated (ASOC + LifeSim row + 30 Oct line). Commits 6d06831, e1fe57c.
-- 16:07 IST: (c) 04_Paper_Fix_List.md written. Sens jobs at cap=256.
+- 16:07 IST: (c) text fix list written (not published). Sens jobs at cap=256.
 - 16:38 IST: (b) sensitivity sweeps done (12/12); 03_Sensitivity_Report.md written. All tasks done; laptop idle.

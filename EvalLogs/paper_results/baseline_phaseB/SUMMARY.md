@@ -16,7 +16,7 @@ Wall clock: 12.9 min
 ## NOTES
 - Mechanism names in logs: SuccessWeighted, TabularNgramBC, EmptyLTM.
 - No PPO/DQN. Simple learned baseline only.
-- Reader artifact: LifeSim.exe --eval-baseline.
+- Reproduce: LifeSim.exe --eval-baseline.
 - Seed failures: 0 / 100 seed-world cells. Raw CSV rows: 300 (4 worlds x 25 seeds x 3 policies).
 
 ### Optimal reference
